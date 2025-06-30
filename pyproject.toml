@@ -1,0 +1,140 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bsm"
+version = "1.0.0"
+description = "BullShit Meter - AI-powered fact checker and counter-argument generator"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "BSM Development Team", email = "support@bsm-app.com"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Desktop Environment",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "PyQt6>=6.6.0",
+    "pynput>=1.7.6",
+    "pillow>=10.0.0",
+    "requests>=2.31.0",
+    "openai>=1.3.0",
+    "anthropic>=0.7.0",
+    "pyautogui>=0.9.54",
+    "keyboard>=0.13.5",
+    "pystray>=0.19.4",
+    "markdown>=3.5.0",
+    "pyyaml>=6.0.1",
+    "cryptography>=41.0.0",
+    "pytesseract>=0.3.10",
+    "aiosqlite>=0.19.0",
+    "opencv-python>=4.8.0",
+    "numpy>=1.24.0",
+    "aiofiles>=23.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-qt>=4.2.0",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.21.0",
+    "mypy>=1.5.0",
+    "flake8>=6.1.0",
+    "black>=23.7.0",
+    "sphinx>=7.1.0",
+    "sphinx-rtd-theme>=1.3.0",
+    "bandit>=1.7.5",
+    "twine>=4.0.2",
+]
+
+[project.urls]
+Homepage = "https://github.com/bsm-app/bsm"
+Documentation = "https://bsm-app.readthedocs.io"
+Repository = "https://github.com/bsm-app/bsm"
+Issues = "https://github.com/bsm-app/bsm/issues"
+
+[project.scripts]
+bsm = "bsm.main:main"
+
+[project.entry-points."bsm.ai_providers"]
+openai = "bsm.core.ai_providers:OpenAIProvider"
+claude = "bsm.core.ai_providers:ClaudeProvider"
+ollama = "bsm.core.ai_providers:OllamaProvider"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["bsm*"]
+exclude = ["tests*"]
+
+[tool.setuptools.package-data]
+bsm = [
+    "assets/*.png",
+    "assets/*.ico",
+    "themes/*.json",
+    "locales/*.json",
+]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --strict-markers"
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+namespace_packages = true
+ignore_missing_imports = true
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ["E203", "W503"]
+exclude = [".git", "__pycache__", "build", "dist", ".eggs"]
+
+[tool.black]
+line-length = 88
+target-version = ["py38", "py39", "py310", "py311"]
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/'''
+
+[tool.coverage.run]
+source = ["bsm"]
+omit = ["*/tests/*", "*/test_*", "*/__init__.py"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if __name__ == .__main__.:",
+    "raise AssertionError",
+    "raise NotImplementedError",
+]
